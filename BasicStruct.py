@@ -114,6 +114,42 @@ def setup_database():
     conn.commit()
     conn.close()
     
+@app.route('/all_users', methods=['GET'])
+def get_all_users():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user_data")
+    user_data = cursor.fetchone()
+    user_dict = {
+        "name": user_data[0],
+        "age": user_data[1],
+        "weight": user_data[2],
+        "height": user_data[3],
+        "goal": user_data[4],
+    } if user_data else {}
+    
+    #Fetch workout logs
+    cursor.execute("SELECT * FROM workout_logs")
+    workout_logs = cursor.fetchall()
+    workout_list = [
+        {
+            "date": workout[0],
+            "exercise": workout[1],
+            "sets": workout[2],
+            "reps": workout[3],
+            "weight": workout[4]
+        } for workout in workout_logs
+    ]
+    
+    conn.close()
+    
+    #Combine user data and workout logs
+    response_data = {
+        "user_data": user_dict,
+        "workout_logs": workout_list
+    }
+    return jsonify(response_data)
+    
 @app.route('/debug', methods=['GET'])
 def debug():
     data = {
