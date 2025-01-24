@@ -4,7 +4,7 @@ import zipfile
 #Download the dataset
 api = KaggleApi()
 api.authenticate()
-dataset_name = "niharika41298/gym-exercise-data"
+dataset_name = "valakhorasani/gym-members-exercise-dataset"
 download_path = "gym-exercise-data.zip"
 
 # Download and extract
